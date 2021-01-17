@@ -1,6 +1,6 @@
 service: notes-api
 
-# Create an optimized package for our functions 
+# Create an optimized package for our functions
 package:
   individually: true
 
@@ -13,12 +13,34 @@ provider:
   name: aws
   runtime: nodejs12.x
   stage: prod
-  region: us-east-1
+  region: eu-west-3
+
+  # These environment variables are made available to our functions
+  # under process.env.
+  environment:
+    tableName: notes
+
+  # 'iamRoleStatements' defines the permission policy for the Lambda function.
+  # In this case Lambda functions are granted with permissions to access DynamoDB.
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Scan
+        - dynamodb:Query
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+        - dynamodb:DescribeTable
+      Resource: "arn:aws:dynamodb:eu-west-3:*:*"
 
 functions:
-  hello:
-    handler: handler.hello
+  # Defines an HTTP API endpoint that calls the main function in create.js
+  # - path: url path is /notes
+  # - method: POST request
+  create:
+    handler: create.main
     events:
       - http:
-          path: hello
-          method: get
+          path: notes
+          method: post
