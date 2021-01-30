@@ -22,9 +22,8 @@ function App() {
     try {
       await Auth.currentSession();
       setIsAuthenticated(true);
-    }
-    catch (e) {
-      if (e !== 'No current user') {
+    } catch (e) {
+      if (e !== "No current user") {
         alert(e);
       }
     }
@@ -51,17 +50,22 @@ function App() {
           <Navbar.Collapse className="justify-content-end">
             <Nav activeKey={window.location.pathname}>
               {isAuthenticated ? (
-                <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
+                <>
+                  <LinkContainer to="/settings">
+                    <Nav.Link>Settings</Nav.Link>
+                  </LinkContainer>
+                  <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
+                </>
               ) : (
-                  <>
-                    <LinkContainer to="/signup">
-                      <Nav.Link>Signup</Nav.Link>
-                    </LinkContainer>
-                    <LinkContainer to="/login">
-                      <Nav.Link>Login</Nav.Link>
-                    </LinkContainer>
-                  </>
-                )}
+                <>
+                  <LinkContainer to="/signup">
+                    <Nav.Link>Signup</Nav.Link>
+                  </LinkContainer>
+                  <LinkContainer to="/login">
+                    <Nav.Link>Login</Nav.Link>
+                  </LinkContainer>
+                </>
+              )}
             </Nav>
           </Navbar.Collapse>
         </Navbar>
