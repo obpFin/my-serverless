@@ -1,0 +1,45 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'photo-app-users-rest-api-sam
+
+  Sample SAM Template for photo-app-users-rest-api-sam
+
+  '
+Globals:
+  Function:
+    Timeout: 20
+    Runtime: java11
+    Architectures:
+    - x86_64
+    MemorySize: 512
+Resources:
+  PostHandlerLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: PostHandlerLambdaFunction
+      Handler: peltonen.oskari.photoapp.users.PostHandler::handleRequest
+      Events:
+        PhotoAppUsers:
+          Type: Api
+          Properties:
+            Path: /users
+            Method: post
+    Metadata:
+      SamResourceId: PostHandlerLambdaFunction
+Outputs:
+  PhotoAppUsersApi:
+    Description: An API endpoint to create a new User
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/users/
+  PostHandlerLambdaFunction:
+    Description: PostHandlerLambdaFunction ARN
+    Value:
+      Fn::GetAtt:
+      - PostHandlerLambdaFunction
+      - Arn
+  PostHandlerLambdaFunctionIamRole:
+    Description: Implicit IAM Role created for PostHandlerLambdaFunction
+    Value:
+      Fn::GetAtt:
+      - PostHandlerLambdaFunctionRole
+      - Arn

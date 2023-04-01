@@ -1,0 +1,10 @@
+version = 0.1
+[default.deploy.parameters]
+stack_name = "data-transformation-example"
+resolve_s3 = true
+s3_prefix = "data-transformation-example"
+region = "eu-west-3"
+profile = "user"
+capabilities = "CAPABILITY_IAM"
+image_repositories = []
+confirm_changeset = true
