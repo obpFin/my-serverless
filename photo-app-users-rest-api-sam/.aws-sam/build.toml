@@ -5,9 +5,9 @@ codeuri = "C:\\Users\\oskar\\OneDrive\\Tiedostot\\repositories_win\\my-serverles
 runtime = "java11"
 architecture = "x86_64"
 handler = "peltonen.oskari.photoapp.users.CreateUserHandler::handleRequest"
-source_hash = "b8f79f93cab7190fa6db590fc2e3c27f0cbae7139ea7d2bce770d801ea36d4eb"
+source_hash = "af9795b0340702b1a0d3d1903d24fe223694fe32edacffccd01e77633459f69a"
 manifest_hash = ""
 packagetype = "Zip"
-functions = ["CreateUserHandlerFunction", "ConfirmUserHandlerFunction"]
+functions = ["CreateUserHandlerFunction", "ConfirmUserHandlerFunction", "LoginUserHandlerFunction"]
 
 [layer_build_definitions]
