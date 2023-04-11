@@ -13,18 +13,33 @@ Globals:
     Architectures:
       - x86_64
     MemorySize: 512
+    Environment:
+      Variables:
+        MY_COGNITO_POOL_APP_CLIENT_ID: AQICAHgb1LCGn4TG6EUD24qMGMxr1MpHehp7VYQ+Ycib9n468QH8LhneYKGtOf3sUsZfERqbAAAAeDB2BgkqhkiG9w0BBwagaTBnAgEAMGIGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMzSdoUmKL0BLm3k58AgEQgDV+qZ2ZACNaglCNBSE/JiJmjXW6dAlVJ29kQL8t8vTCL9Elz3nHifrNVLIIjXays3u3Y0ADkg==
+        MY_COGNITO_POOL_APP_CLIENT_SECRET: AQICAHgb1LCGn4TG6EUD24qMGMxr1MpHehp7VYQ+Ycib9n468QGaLDd8NTXDgglY7Rtku+3VAAAAlTCBkgYJKoZIhvcNAQcGoIGEMIGBAgEAMHwGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMxCgYVMXuLatUq35xAgEQgE9lr7WFmLszglLF77a800IAuh3ECo25YNiIRPTm2wkGCRK8zRq5aW8lpJlPzFGLwRWb2i9XYGawmruZ9yL5TZngaLPYzcmo6xcJ5c5SYTf+
 
 Resources:
-  PostHandlerLambdaFunction:
+  CreateUserHandlerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: PhotoAppUsersApi
-      Handler: peltonen.oskari.photoapp.users.PostHandler::handleRequest
+      Handler: peltonen.oskari.photoapp.users.CreateUserHandler::handleRequest
       Events:
-        PhotoAppUsers:
+        CreateUser:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /users
+            Method: post
+  ConfirmUserHandlerFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: PhotoAppUsersApi
+      Handler: peltonen.oskari.photoapp.users.ConfirmUserHandler::handleRequest
+      Events:
+        ConnfirmUser:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /confirm
             Method: post
 
 Outputs:
@@ -34,9 +49,9 @@ Outputs:
   PhotoAppUsersApi:
     Description: "An API endpoint to create a new User"
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/users/"
-  PostHandlerLambdaFunction:
-    Description: "PostHandlerLambdaFunction ARN"
-    Value: !GetAtt PostHandlerLambdaFunction.Arn
-  PostHandlerLambdaFunctionIamRole:
-    Description: "Implicit IAM Role created for PostHandlerLambdaFunction"
-    Value: !GetAtt PostHandlerLambdaFunctionRole.Arn
+  CreateUserHandlerFunction:
+    Description: "CreateUserHandlerFunction ARN"
+    Value: !GetAtt CreateUserHandlerFunction.Arn
+  CreateUserHandlerFunctionIamRole:
+    Description: "Implicit IAM Role created for CreateUserHandlerFunction"
+    Value: !GetAtt CreateUserHandlerFunctionRole.Arn

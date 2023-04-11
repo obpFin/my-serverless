@@ -4,10 +4,10 @@
 codeuri = "C:\\Users\\oskar\\OneDrive\\Tiedostot\\repositories_win\\my-serverless\\photo-app-users-rest-api-sam\\PhotoAppUsersApi"
 runtime = "java11"
 architecture = "x86_64"
-handler = "peltonen.oskari.photoapp.users.PostHandler::handleRequest"
-source_hash = "dbffcef3cf8b6909e86840cbacb079368f4f228c421a7a6fdc81bc5a7587a9cf"
+handler = "peltonen.oskari.photoapp.users.CreateUserHandler::handleRequest"
+source_hash = "b8f79f93cab7190fa6db590fc2e3c27f0cbae7139ea7d2bce770d801ea36d4eb"
 manifest_hash = ""
 packagetype = "Zip"
-functions = ["PostHandlerLambdaFunction"]
+functions = ["CreateUserHandlerFunction", "ConfirmUserHandlerFunction"]
 
 [layer_build_definitions]
