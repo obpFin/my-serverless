@@ -20,6 +20,15 @@ Globals:
         MY_COGNITO_POOL_ID: AQICAHgb1LCGn4TG6EUD24qMGMxr1MpHehp7VYQ+Ycib9n468QGivNTSwtMqCjikIbWFwSARAAAAcTBvBgkqhkiG9w0BBwagYjBgAgEAMFsGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMG8yUmP/xUzHA61ZiAgEQgC7OzNOHidFtxKtTQRVNvl/LWedVQZMaLRoJftaBEX97usQlM92YMYsHGu43yXDG
 
 Resources:
+  MyApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      DefinitionBody:
+        Fn::Transform:
+          Name: AWS::Include
+          Parameters:
+            Location: open-api.yaml
   CreateUserHandlerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -31,17 +40,21 @@ Resources:
           Properties:
             Path: /users
             Method: post
+            RestApiId:
+              Ref: MyApi
   ConfirmUserHandlerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: PhotoAppUsersApi
       Handler: peltonen.oskari.photoapp.users.ConfirmUserHandler::handleRequest
       Events:
-        ConnfirmUser:
+        ConfirmUser:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /confirm
             Method: post
+            RestApiId:
+              Ref: MyApi
   LoginUserHandlerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -53,6 +66,8 @@ Resources:
           Properties:
             Path: /login
             Method: post
+            RestApiId:
+              Ref: MyApi
   AddUserToGroupHandlerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -71,14 +86,28 @@ Resources:
           Properties:
             Path: /users/{userName}/add-to-group
             Method: post
-
+            RestApiId:
+              Ref: MyApi
+  GetUserHandlerFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: PhotoAppUsersApi
+      Handler: peltonen.oskari.photoapp.users.GetUserHandler::handleRequest
+      Events:
+        GetUser:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /users/me
+            Method: get
+            RestApiId:
+              Ref: MyApi
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   PhotoAppUsersApi:
     Description: "An API endpoint to create a new User"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/users/"
+    Value: !Sub "https://${MyApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/users/"
   CreateUserHandlerFunction:
     Description: "CreateUserHandlerFunction ARN"
     Value: !GetAtt CreateUserHandlerFunction.Arn
